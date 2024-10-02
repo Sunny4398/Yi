@@ -265,4 +265,78 @@ def toss_and_show():
             display_toss.set("投擲中...")
             root.update()
             time.sleep(0.05)
-            display_toss.
+            display_toss.set("")
+            root.update()
+            time.sleep(0.05)
+
+        display_toss.set(f"{display_toss.get()}\n第{len(tosses)}次投擲: {result} ({visual_line})")
+
+        labels_original.append(result)
+        lines_display_original.append(visual_line)
+
+        if len(tosses) == 6:
+            toss_button.config(state=tk.DISABLED)
+            result_frame.pack(pady=10)
+            retry_button.pack(pady=10)
+            show_hexagrams()
+
+# 初始化主視窗
+root = tk.Tk()
+root.title("易經占卜遊戲")
+
+# 第一頁面：開始畫面
+start_frame = tk.Frame(root)
+start_frame.pack()
+
+title = tk.Label(start_frame, text="歡迎來到易經占卜遊戲！", font=("Arial", 16))
+title.pack(pady=10)
+
+start_button = tk.Button(start_frame, text="開始占卜", command=lambda: [start_frame.pack_forget(), toss_frame.pack(pady=10)], font=("Arial", 14))
+start_button.pack()
+
+# 第二頁面：投擲過程頁面
+toss_frame = tk.Frame(root)
+
+instruction = tk.Label(toss_frame, text="請依次投擲六次，記錄陰陽。", font=("Arial", 14))
+instruction.pack(pady=10)
+
+toss_button = tk.Button(toss_frame, text="投擲銅錢", command=toss_and_show, font=("Arial", 14))
+toss_button.pack(pady=10)
+
+display_toss = tk.StringVar()
+toss_result_label = tk.Label(toss_frame, textvariable=display_toss, font=("Arial", 12))
+toss_result_label.pack()
+
+# 第三頁面：顯示卦象頁面
+result_frame = tk.Frame(root)
+
+canvas = tk.Canvas(result_frame, width=400, height=500)
+canvas.pack()
+
+hexagram_display = tk.StringVar()
+hexagram_label = tk.Label(result_frame, textvariable=hexagram_display, font=("Arial", 12))
+hexagram_label.pack(pady=10)
+
+# 重新占卜按鈕
+retry_button = tk.Button(result_frame, text="重新占卜", command=reset_game, font=("Arial", 14))
+
+# 查看解析按鈕
+interpretation_button = tk.Button(result_frame, text="查看解析", command=show_interpretation, font=("Arial", 14))
+
+# 第四頁面：解析頁面
+interpretation_frame = tk.Frame(root)
+
+interpretation_canvas = tk.Canvas(interpretation_frame, width=400, height=500)
+interpretation_canvas.pack()
+
+# 顯示卦象解析
+original_hexagram_text = tk.StringVar()
+original_hexagram_label = tk.Label(interpretation_frame, textvariable=original_hexagram_text, font=("Arial", 12), wraplength=380)
+original_hexagram_label.pack(pady=5)
+
+changed_hexagram_text = tk.StringVar()
+changed_hexagram_label = tk.Label(interpretation_frame, textvariable=changed_hexagram_text, font=("Arial", 12), wraplength=380)
+changed_hexagram_label.pack(pady=5)
+
+# 開始遊戲
+root.mainloop()
